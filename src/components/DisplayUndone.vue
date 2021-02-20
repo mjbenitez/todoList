@@ -1,8 +1,14 @@
 <template>
   <Logo></Logo>
   <ToDoInput :todoInput="todoInput" @add="handleAddTodo"></ToDoInput>
+  <!-- <DisplayUndone @filterDone="handleFilterDone($event)"></DisplayUndone> -->
   <div class="check-done">
-    <input data-test="checkbox" type="checkbox" :checked="displayDone" />
+    <input
+      data-test="checkbox"
+      type="checkbox"
+      v-model="selectedCategory"
+      value="undone"
+    />
     Display only Done
   </div>
   <ToDo
@@ -23,10 +29,6 @@ import ToDo from "./components/ToDo.vue";
 
 export default {
   name: "App",
-   props: {
-    text: String,
-    done: Boolean
-  },
   components: {
     Logo,
     ToDoInput,
@@ -36,8 +38,21 @@ export default {
     return {
       todos: [],
       edited: false,
-      oldTodoIndex: 0
+      oldTodoIndex: 0,
+      selectedCategory: "All"
     };
+  },
+  computed: {
+    filteredTodos() {
+      const done = this.selectedCategory;
+      if (done === "All") {
+        return this.todos;
+      } else {
+        return this.todos.filter(function(todo) {
+          return todo.checked;
+        });
+      }
+    }
   },
   methods: {
     handleTodoChange(event, index) {

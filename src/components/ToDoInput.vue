@@ -14,6 +14,12 @@ export default {
     };
   },
   methods: {
+    onKeyup() {
+      if (this.text) {
+        this.$emit("add", this.text);
+        this.text = "";
+      }
+    },
     change(event) {
       this.$emit("todoDone", event.target.checked);
       const editableField = document.getElementById("text-span");

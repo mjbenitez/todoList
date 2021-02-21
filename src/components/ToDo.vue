@@ -19,11 +19,11 @@
       </span>
       <button v-if="done" @click="remove">
         Remove
-        <!-- <i class="fas fa-trash-alt"></i> -->
+        <i class="fas fa-trash-alt"></i>
       </button>
       <button v-else @click="edit">
         Edit
-        <!-- <i class="fas fa-pen"></i> -->
+        <i class="fas fa-pen"></i>
       </button>
     </div>
   </div>

@@ -1,10 +1,7 @@
 <template>
   <Logo></Logo>
   <ToDoInput :todoInput="todoInput" @add="handleAddTodo"></ToDoInput>
-  <div class="check-done">
-    <input data-test="checkbox" type="checkbox" :checked="displayDone" />
-    Display only Done
-  </div>
+  <DisplayUndone @todoFiltered="handleFilter($event)"></DisplayUndone>
   <ToDo
     v-for="(todo, index) in todos"
     :key="index"
@@ -20,21 +17,23 @@
 import Logo from "./components/Logo.vue";
 import ToDoInput from "./components/ToDoInput.vue";
 import ToDo from "./components/ToDo.vue";
+import DisplayUndone from "./components/DisplayUndone.vue";
 
 export default {
   name: "App",
-   props: {
-    text: String,
-    done: Boolean
+  props: {
+    text: String
   },
   components: {
     Logo,
     ToDoInput,
-    ToDo
+    ToDo,
+    DisplayUndone
   },
   data() {
     return {
       todos: [],
+      auxTodos: [],
       edited: false,
       oldTodoIndex: 0
     };
@@ -52,6 +51,7 @@ export default {
         text
       });
       this.edited = false;
+      this.auxTodos = this.todos;
     },
     handleTodoRemove(index) {
       this.todos.splice(index, 1);
@@ -60,11 +60,18 @@ export default {
       this.edited = true;
       document.getElementById("todo-input").value = todo;
       this.oldTodoIndex = index;
+    },
+    handleFilter(event) {
+      console.log(this.auxTodos);
+      if (event) {
+        return (this.todos = this.todos.filter(todo => todo.checked === false));
+      } else {
+        return (this.todos = this.auxTodos);
+      }
     }
   }
 };
 </script>
-
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -75,12 +82,5 @@ export default {
   margin-top: 12px;
   display: flex;
   flex-direction: column;
-}
-
-.check-done {
-  margin-top: 12px;
-  display: flex;
-  flex-direction: row;
-  justify-items: flex-start;
 }
 </style>
